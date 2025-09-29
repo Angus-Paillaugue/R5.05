@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,6 +29,9 @@ public class ArticleController {
 
     Integer id = Integer.valueOf(userId);
     User user = userRepository.findById(id).orElse(null);
+    if (user == null) {
+      throw new Error("The user ID you provided does not exists");
+    }
     a.setAuteur(user);
 
     articleRepository.save(a);
@@ -45,6 +49,18 @@ public class ArticleController {
     articleRepository.deleteById(id);
 
     return "Deleted";
+  }
+
+  @PutMapping(path = "/update")
+  public @ResponseBody String updateArticle(@RequestParam int id, @RequestParam String contenu) {
+    Article a = articleRepository.findById(id).orElse(null);
+    if(a == null) {
+      throw new Error("The article ID you provided does not exists");
+    }
+    a.setContenu(contenu);
+    articleRepository.save(a);
+
+    return "Updated";
   }
 
 }
