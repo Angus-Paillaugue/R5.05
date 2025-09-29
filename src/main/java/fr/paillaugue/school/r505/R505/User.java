@@ -3,6 +3,7 @@ package fr.paillaugue.school.r505.R505;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+
 import jakarta.persistence.Id;
 
 @Entity // This tells Hibernate to make a table out of this class
@@ -14,6 +15,8 @@ public class User {
   private String name;
 
   private String email;
+
+  private Roles role;
 
   public Integer getId() {
     return id;
@@ -37,5 +40,13 @@ public class User {
 
   public void setEmail(String email) {
     this.email = email;
+  }
+
+  public Roles getRole() {
+    return this.role;
+  }
+
+  public void setRole(Roles role) {
+    this.role = role;
   }
 }
