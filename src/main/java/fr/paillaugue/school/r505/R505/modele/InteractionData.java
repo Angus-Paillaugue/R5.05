@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Interaction {
+public class InteractionData {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
@@ -18,11 +18,11 @@ public class Interaction {
   @JsonBackReference
   @ManyToOne
   @JoinColumn(name = "article_id", nullable = false)
-  private Article article;
+  private ArticleData article;
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  private UserData user;
 
   private InteractionEnum interaction;
 
@@ -34,19 +34,19 @@ public class Interaction {
     this.id = id;
   }
 
-  public Article getArticle() {
+  public ArticleData getArticle() {
     return article;
   }
 
-  public void setArticle(Article article) {
+  public void setArticle(ArticleData article) {
     this.article = article;
   }
 
-  public User getUser() {
+  public UserData getUser() {
     return user;
   }
 
-  public void setUser(User user) {
+  public void setUser(UserData user) {
     this.user = user;
   }
 
@@ -57,4 +57,5 @@ public class Interaction {
   public void setInteraction(InteractionEnum interaction) {
     this.interaction = interaction;
   }
+
 }

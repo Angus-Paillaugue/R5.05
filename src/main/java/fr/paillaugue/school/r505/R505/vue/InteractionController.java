@@ -1,4 +1,4 @@
-package fr.paillaugue.school.r505.R505.controller;
+package fr.paillaugue.school.r505.R505.vue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -8,19 +8,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fr.paillaugue.school.r505.R505.modele.Article;
-import fr.paillaugue.school.r505.R505.modele.Interaction;
-import fr.paillaugue.school.r505.R505.modele.InteractionEnum;
-import fr.paillaugue.school.r505.R505.modele.User;
-import fr.paillaugue.school.r505.R505.vue.ArticleRepository;
-import fr.paillaugue.school.r505.R505.vue.InteractionRepository;
-import fr.paillaugue.school.r505.R505.vue.UserRepository;
+import fr.paillaugue.school.r505.R505.controller.InteractionService;
+import fr.paillaugue.school.r505.R505.modele.ArticleData;
+import fr.paillaugue.school.r505.R505.modele.ArticleRepository;
+import fr.paillaugue.school.r505.R505.modele.InteractionData;
+import fr.paillaugue.school.r505.R505.modele.InteractionRepository;
+import fr.paillaugue.school.r505.R505.modele.UserData;
+import fr.paillaugue.school.r505.R505.modele.UserRepository;
 
 @Controller
 @RequestMapping(path = "/interaction")
 public class InteractionController {
   @Autowired
   private InteractionRepository interactionRepository;
+  @Autowired
+  private InteractionService interactionService;
   @Autowired
   private ArticleRepository articleRepository;
   @Autowired
@@ -29,27 +31,22 @@ public class InteractionController {
   @PostMapping(path = "/add")
   public @ResponseBody String react(@RequestParam Integer articleId, @RequestParam Integer userId,
       @RequestParam String interaction) {
-    Article article = articleRepository.findById(articleId).orElse(null);
+    ArticleData article = articleRepository.findById(articleId).orElse(null);
     if (article == null) {
       throw new IllegalArgumentException("The article ID you provided does not exist");
     }
 
-    User user = userRepository.findById(userId).orElse(null);
+    UserData user = userRepository.findById(userId).orElse(null);
     if (user == null) {
       throw new IllegalArgumentException("The user ID you provided does not exist");
     }
-    Interaction newInteraction = new Interaction();
-    newInteraction.setArticle(article);
-    newInteraction.setUser(user);
-    newInteraction.setInteraction(InteractionEnum.valueOf(interaction.toUpperCase()));
-
-    interactionRepository.save(newInteraction);
+    interactionService.react(article, user, interaction);
     return "Interaction saved";
   }
 
   @GetMapping(path = "/all")
-  public @ResponseBody Iterable<Interaction> getAllReactionsToArticle(@RequestParam Integer articleId) {
-    Article article = articleRepository.findById(articleId).orElse(null);
+  public @ResponseBody Iterable<InteractionData> getAllReactionsToArticle(@RequestParam Integer articleId) {
+    ArticleData article = articleRepository.findById(articleId).orElse(null);
     if (article == null) {
       throw new IllegalArgumentException("The article ID you provided does not exist");
     }

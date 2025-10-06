@@ -1,4 +1,4 @@
-package fr.paillaugue.school.r505.R505.controller;
+package fr.paillaugue.school.r505.R505.vue;
 
 import java.sql.Date;
 
@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import fr.paillaugue.school.r505.R505.modele.Article;
-import fr.paillaugue.school.r505.R505.modele.User;
-import fr.paillaugue.school.r505.R505.vue.ArticleRepository;
-import fr.paillaugue.school.r505.R505.vue.UserRepository;
+import fr.paillaugue.school.r505.R505.modele.ArticleData;
+import fr.paillaugue.school.r505.R505.modele.ArticleRepository;
+import fr.paillaugue.school.r505.R505.modele.UserData;
+import fr.paillaugue.school.r505.R505.modele.UserRepository;
 
 
 @Controller
@@ -28,12 +28,12 @@ public class ArticleController {
 
   @PostMapping(path = "/add")
   public @ResponseBody String addNewArticle(@RequestParam String contenu, @RequestParam String userId) {
-    Article a = new Article();
+    ArticleData a = new ArticleData();
     a.setDatePublication(new Date(System.currentTimeMillis()));
     a.setContenu(contenu);
 
     Integer id = Integer.valueOf(userId);
-    User user = userRepository.findById(id).orElse(null);
+    UserData user = userRepository.findById(id).orElse(null);
     if (user == null) {
       throw new Error("The user ID you provided does not exists");
     }
@@ -44,7 +44,7 @@ public class ArticleController {
   }
 
   @GetMapping(path = "/all")
-  public @ResponseBody Iterable<Article> getAllUsers() {
+  public @ResponseBody Iterable<ArticleData> getAllUsers() {
     return articleRepository.findAll();
   }
 
@@ -57,7 +57,7 @@ public class ArticleController {
 
   @PutMapping(path = "/update")
   public @ResponseBody String updateArticle(@RequestParam int id, @RequestParam String contenu) {
-    Article a = articleRepository.findById(id).orElse(null);
+    ArticleData a = articleRepository.findById(id).orElse(null);
     if(a == null) {
       throw new Error("The article ID you provided does not exists");
     }

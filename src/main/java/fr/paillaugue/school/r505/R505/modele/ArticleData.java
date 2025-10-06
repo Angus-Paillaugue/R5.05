@@ -15,7 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Article {
+public class ArticleData {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
@@ -26,11 +26,11 @@ public class Article {
 
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "parent_id")
-  private User auteur;
+  private UserData auteur;
 
   @JsonManagedReference
   @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<Interaction> interactions;
+  private List<InteractionData> interactions;
 
   public Integer getId() {
     return id;
@@ -56,19 +56,19 @@ public class Article {
     this.publication = publication;
   }
 
-  public User getAuteur() {
+  public UserData getAuteur() {
     return this.auteur;
   }
 
-  public void setAuteur(User user) {
+  public void setAuteur(UserData user) {
     this.auteur = user;
   }
 
-  public List<Interaction> getInteractions() {
+  public List<InteractionData> getInteractions() {
     return interactions;
   }
 
-  public void setInteractions(List<Interaction> interactions) {
+  public void setInteractions(List<InteractionData> interactions) {
     this.interactions = interactions;
   }
 }

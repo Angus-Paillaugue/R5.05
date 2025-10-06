@@ -1,4 +1,4 @@
-package fr.paillaugue.school.r505.R505.controller;
+package fr.paillaugue.school.r505.R505.vue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fr.paillaugue.school.r505.R505.modele.Roles;
-import fr.paillaugue.school.r505.R505.modele.User;
-import fr.paillaugue.school.r505.R505.vue.UserRepository;
+import fr.paillaugue.school.r505.R505.modele.UserData;
+import fr.paillaugue.school.r505.R505.modele.UserRepository;
 
 
 @Controller
@@ -21,7 +21,7 @@ public class UserController {
 
   @PostMapping(path = "/add")
   public @ResponseBody String addNewUser(@RequestParam String name, @RequestParam String email) {
-    User n = new User();
+    UserData n = new UserData();
     n.setName(name);
     n.setEmail(email);
     if(name.equals("admin"))
@@ -33,7 +33,7 @@ public class UserController {
   }
 
   @GetMapping(path = "/all")
-  public @ResponseBody Iterable<User> getAllUsers() {
+  public @ResponseBody Iterable<UserData> getAllUsers() {
     return userRepository.findAll();
   }
 
