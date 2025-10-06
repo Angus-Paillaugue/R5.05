@@ -1,4 +1,4 @@
-package fr.paillaugue.school.r505.R505;
+package fr.paillaugue.school.r505.R505.controller;
 
 import java.sql.Date;
 
@@ -12,6 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import fr.paillaugue.school.r505.R505.modele.Article;
+import fr.paillaugue.school.r505.R505.modele.User;
+import fr.paillaugue.school.r505.R505.vue.ArticleRepository;
+import fr.paillaugue.school.r505.R505.vue.UserRepository;
+
 
 @Controller
 @RequestMapping(path = "/article")
@@ -21,7 +26,7 @@ public class ArticleController {
   @Autowired
   private UserRepository userRepository;
 
-  @PostMapping(path = "/add") // Map ONLY POST Requests
+  @PostMapping(path = "/add")
   public @ResponseBody String addNewArticle(@RequestParam String contenu, @RequestParam String userId) {
     Article a = new Article();
     a.setDatePublication(new Date(System.currentTimeMillis()));
@@ -40,7 +45,6 @@ public class ArticleController {
 
   @GetMapping(path = "/all")
   public @ResponseBody Iterable<Article> getAllUsers() {
-    // This returns a JSON or XML with the users
     return articleRepository.findAll();
   }
 

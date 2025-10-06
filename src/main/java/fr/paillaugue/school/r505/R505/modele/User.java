@@ -1,4 +1,4 @@
-package fr.paillaugue.school.r505.R505;
+package fr.paillaugue.school.r505.R505.modele;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

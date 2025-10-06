@@ -1,6 +1,10 @@
-package fr.paillaugue.school.r505.R505;
+package fr.paillaugue.school.r505.R505.modele;
 
 import java.sql.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -8,11 +12,12 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
-@Entity // This tells Hibernate to make a table out of this class
+@Entity
 public class Article {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
   private String contenu;
@@ -22,6 +27,10 @@ public class Article {
   @ManyToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "parent_id")
   private User auteur;
+
+  @JsonManagedReference
+  @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Interaction> interactions;
 
   public Integer getId() {
     return id;
@@ -53,5 +62,13 @@ public class Article {
 
   public void setAuteur(User user) {
     this.auteur = user;
+  }
+
+  public List<Interaction> getInteractions() {
+    return interactions;
+  }
+
+  public void setInteractions(List<Interaction> interactions) {
+    this.interactions = interactions;
   }
 }
