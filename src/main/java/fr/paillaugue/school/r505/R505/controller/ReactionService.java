@@ -38,12 +38,10 @@ public class ReactionService {
     Optional<ReactionData> existingInteractionOpt = repository.findByArticleIdAndUserId(articleId, userId);
 
     if (existingInteractionOpt.isPresent()) {
-      System.out.println("Updating existing interaction");
       ReactionData existingInteraction = existingInteractionOpt.get();
       existingInteraction.setReaction(interaction);
       repository.save(existingInteraction);
     } else {
-      System.out.println("Creating new interaction");
       ReactionData newInteraction = new ReactionData();
       newInteraction.setArticle(article);
       newInteraction.setUser(user);

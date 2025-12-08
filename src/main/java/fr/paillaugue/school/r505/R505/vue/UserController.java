@@ -2,7 +2,10 @@ package fr.paillaugue.school.r505.R505.vue;
 
 import fr.paillaugue.school.r505.R505.controller.User;
 import fr.paillaugue.school.r505.R505.controller.UserService;
+import fr.paillaugue.school.r505.R505.errorHandling.Response;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 
@@ -13,23 +16,32 @@ public class UserController {
   private UserService userService;
 
   @PostMapping("/add")
-  public @ResponseBody Integer addNewUser(@RequestBody User user) {
-    Integer id = userService.createUser(user);
-    return id;
+  public @ResponseBody ResponseEntity<Response<Integer>> addNewUser(@RequestBody User user) {
+    try {
+      Integer id = userService.createUser(user);
+      return Response.success(id);
+    } catch (Exception e) {
+      return Response.error(e);
+    }
   }
 
   @GetMapping("/{id}/get")
-  public @ResponseBody User getUserById(@PathVariable Integer id) {
-    User user = userService.findById(id);
-    if (user == null) {
-      return null;
+  public @ResponseBody ResponseEntity<Response<User>> getUserById(@PathVariable Integer id) {
+    try {
+      User user = userService.findById(id);
+      return Response.success(user);
+    } catch (Exception e) {
+      return Response.error(e);
     }
-    return user;
   }
 
   @GetMapping("/all")
-  public @ResponseBody Collection<User> getAllUsers() {
-    Collection<User> users = userService.getAllUsers();
-    return users;
+  public @ResponseBody ResponseEntity<Response<Collection<User>>> getAllUsers() {
+    try {
+      Collection<User> users = userService.getAllUsers();
+      return Response.success(users);
+    } catch (Exception e) {
+      return Response.error(e);
+    }
   }
 }

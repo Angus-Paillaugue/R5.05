@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import fr.paillaugue.school.r505.R505.controller.Article;
 import fr.paillaugue.school.r505.R505.controller.ArticleService;
+import fr.paillaugue.school.r505.R505.errorHandling.Body;
+import fr.paillaugue.school.r505.R505.errorHandling.Response;
 
 @Controller
 @RequestMapping(path = "/article")
@@ -19,22 +21,62 @@ public class ArticleController {
   private ArticleService articleService;
 
   @PostMapping("/add")
-  public ResponseEntity<Integer> addNewArticle(@RequestBody Map<String, Object> request) {
-    String contenu = (String) request.get("contenu");
-    Integer userId = (Integer) request.get("userId");
-    Integer articleId = articleService.createArticle(contenu, userId);
-    return ResponseEntity.ok(articleId);
+  public ResponseEntity<Response<Integer>> addNewArticle(@RequestBody Map<String, Object> request) {
+    try {
+      String contenu = Body.parseBody(request, "contenu");
+      Integer userId = Body.parseBody(request, "userId");
+      Integer articleId = articleService.createArticle(contenu, userId);
+      return Response.success(articleId);
+    } catch (Exception e) {
+      return Response.error(e);
+    }
   }
 
   @GetMapping("/{id}/get")
-  public ResponseEntity<Article> getArticle(@PathVariable Integer id) {
-    Article article = articleService.findById(id);
-    return ResponseEntity.ok(article);
+  public ResponseEntity<Response<Article>> getArticle(@PathVariable Integer id) {
+    try {
+      Article article = articleService.findById(id);
+      if (article == null) {
+        throw new Exception("Article not found");
+      }
+      return Response.success(article);
+    } catch (Exception e) {
+      return Response.error(e);
+    }
   }
 
   @GetMapping(path = "/all")
-  public ResponseEntity<Collection<Article>> getAllArticles() {
-    Collection<Article> articles = articleService.getAll();
-    return ResponseEntity.ok(articles);
+  public ResponseEntity<Response<Collection<Article>>> getAllArticles() {
+    try {
+      Collection<Article> articles = articleService.getAll();
+      return Response.success(articles);
+    } catch (Exception e) {
+      return Response.error(e);
+    }
+  }
+
+  @DeleteMapping("/{id}/delete")
+  public ResponseEntity<Response<String>> deleteArticle(@PathVariable Integer id,
+      @RequestBody Map<String, Object> request) {
+    try {
+      Integer userId = Body.parseBody(request, "userId");
+      articleService.deleteById(id, userId);
+      return Response.success("Article deleted");
+    } catch (Exception e) {
+      return Response.error(e);
+    }
+  }
+
+  @PatchMapping("/{id}/update")
+  public ResponseEntity<Response<String>> updateArticle(@PathVariable Integer id,
+      @RequestBody Map<String, Object> request) {
+    try {
+      Integer userId = Body.parseBody(request, "userId");
+      String newContent = Body.parseBody(request, "contenu");
+      articleService.update(id, userId, newContent);
+      return Response.success("Article updated");
+    } catch (Exception e) {
+      return Response.error(e);
+    }
   }
 }
